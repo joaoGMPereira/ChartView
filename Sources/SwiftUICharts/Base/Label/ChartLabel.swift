@@ -24,9 +24,11 @@ public enum ChartLabelFormat {
 
 public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
+    @EnvironmentObject var chartData: ChartData
     @State var textToDisplay:String = ""
     
     private var title: String
+    private var changeTitlePosition: Bool
     private var format: ChartLabelFormat
     private var labelSize: CGFloat {
         switch labelType {
@@ -76,9 +78,10 @@ public struct ChartLabel: View {
     }
 
     public init (_ title: String,
-                 type: ChartLabelType = .title, format: ChartLabelFormat = .none) {
+                 type: ChartLabelType = .title, changeTitlePosition: Bool = true, format: ChartLabelFormat = .none) {
         self.title = title
-        labelType = type
+        self.labelType = type
+        self.changeTitlePosition = changeTitlePosition
         self.format = format
     }
 
@@ -94,8 +97,10 @@ public struct ChartLabel: View {
                 }
                 .onReceive(self.chartValue.objectWillChange) { _ in
                     self.textToDisplay = self.chartValue.interactionInProgress ? self.format.format(value: self.chartValue.currentValue) : self.title
+                }.onReceive(self.chartData.$data) { _ in
+                    self.textToDisplay = self.title
                 }
-            if !self.chartValue.interactionInProgress {
+            if !self.chartValue.interactionInProgress && changeTitlePosition {
                 Spacer()
             }
         }

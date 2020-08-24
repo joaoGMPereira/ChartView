@@ -97,7 +97,7 @@ public struct ChartLabel: View, LabelBase {
             }
             Text(textToDisplay)
                 .font(.system(size: labelSize))
-                .bold().minimumScaleFactor(0.3)
+                .bold()
                 .foregroundColor(self.labelColor)
                 .padding(self.labelPadding)
                 .onAppear {

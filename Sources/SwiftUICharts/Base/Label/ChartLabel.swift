@@ -80,7 +80,7 @@ public struct ChartLabel: View {
         self.title = title
         self.labelType = type
         self.format = format
-        self.textToDisplay = title
+        self._textToDisplay = .init(wrappedValue: title)
     }
 
     public var body: some View {

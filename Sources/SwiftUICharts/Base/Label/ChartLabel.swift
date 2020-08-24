@@ -104,7 +104,7 @@ public struct ChartLabel: View, LabelBase {
                     self.textToDisplay = self.data.title
             }
             .onReceive(self.chartValue.objectWillChange) { _ in
-                self.textToDisplay = self.chartValue.interactionInProgress ? format.format(value: self.chartValue.currentValue) : self.data.title
+                self.textToDisplay = self.chartValue.interactionInProgress ? self.format.format(value: self.chartValue.currentValue) : self.data.title
             }.onReceive(self.data.$title) { _ in
                 self.textToDisplay = self.data.title
             }

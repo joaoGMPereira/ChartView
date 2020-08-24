@@ -22,10 +22,18 @@ public enum ChartLabelFormat {
     }
 }
 
+public enum ChartLabelPosition {
+    case left
+    case middle
+    case right
+}
+
 public struct ChartLabel: View {
+    @EnvironmentObject private var data: LabelData
     @EnvironmentObject var chartValue: ChartValue
-    @EnvironmentObject var chartData: ChartData
     @State var textToDisplay:String = ""
+    public var labelData = LabelData()
+    private var position: ChartLabelPosition
     
     private var title: String
     private var changeTitlePosition: Bool
@@ -77,30 +85,31 @@ public struct ChartLabel: View {
         }
     }
 
-    public init (_ title: String,
-                 type: ChartLabelType = .title, changeTitlePosition: Bool = true, format: ChartLabelFormat = .none) {
-        self.title = title
+    public init (type: ChartLabelType = .title, position: ChartLabelPosition = .left, format: ChartLabelFormat = .none) {
         self.labelType = type
-        self.changeTitlePosition = changeTitlePosition
+        self.position = position
         self.format = format
     }
 
     public var body: some View {
         HStack {
+            if position == .right || position == .middle {
+                Spacer()
+            }
             Text(textToDisplay)
                 .font(.system(size: labelSize))
                 .bold()
                 .foregroundColor(self.labelColor)
                 .padding(self.labelPadding)
                 .onAppear {
-                    self.textToDisplay = self.title
-                }
-                .onReceive(self.chartValue.objectWillChange) { _ in
-                    self.textToDisplay = self.chartValue.interactionInProgress ? self.format.format(value: self.chartValue.currentValue) : self.title
-                }.onReceive(self.chartData.$data) { _ in
-                    self.textToDisplay = self.title
-                }
-            if !self.chartValue.interactionInProgress && changeTitlePosition {
+                    self.textToDisplay = self.data.title
+            }
+            .onReceive(self.chartValue.objectWillChange) { _ in
+                self.textToDisplay = self.chartValue.interactionInProgress ? String(format: "%.01f", self.chartValue.currentValue) : self.data.title
+            }.onReceive(self.data.$title) { _ in
+                self.textToDisplay = self.data.title
+            }
+            if position == .left || position == .middle {
                 Spacer()
             }
         }

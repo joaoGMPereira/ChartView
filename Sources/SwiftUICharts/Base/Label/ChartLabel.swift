@@ -26,7 +26,11 @@ public struct ChartLabel: View {
     @EnvironmentObject var chartValue: ChartValue
     @State var textToDisplay:String = ""
     
-    private var title: String
+    private var title: String {
+        didSet {
+            textToDisplay = title
+        }
+    }
     private var format: ChartLabelFormat
     private var labelSize: CGFloat {
         switch labelType {

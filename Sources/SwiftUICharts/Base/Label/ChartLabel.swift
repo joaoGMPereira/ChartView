@@ -78,9 +78,9 @@ public struct ChartLabel: View {
     public init (_ title: String,
                  type: ChartLabelType = .title, format: ChartLabelFormat = .none) {
         self.title = title
-        self.textToDisplay = title
         self.labelType = type
         self.format = format
+        self.textToDisplay = title
     }
 
     public var body: some View {

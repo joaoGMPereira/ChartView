@@ -28,16 +28,15 @@ public enum ChartLabelPosition {
     case right
 }
 
-public struct ChartLabel: View {
+public struct ChartLabel: View, LabelBase {
     @EnvironmentObject private var data: LabelData
     @EnvironmentObject var chartValue: ChartValue
-    @State var textToDisplay:String = ""
+    @State var textToDisplay: String = ""
+    
     public var labelData = LabelData()
     private var position: ChartLabelPosition
-    
-    private var title: String
-    private var changeTitlePosition: Bool
     private var format: ChartLabelFormat
+    
     private var labelSize: CGFloat {
         switch labelType {
         case .title:
